@@ -5,8 +5,8 @@ import java.util.ListIterator;
 import javax.swing.JOptionPane;
 
 public class TaskGUI extends javax.swing.JFrame {
-    
-    ArrayList <Task> list;
+
+    ArrayList<Task> list;
     ListIterator li;
     int curtask, tottask;
     Task t;
@@ -105,6 +105,11 @@ public class TaskGUI extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         btnfirst.setText("|<");
+        btnfirst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnfirstActionPerformed(evt);
+            }
+        });
 
         btnlast.setText(">|");
         btnlast.addActionListener(new java.awt.event.ActionListener() {
@@ -114,6 +119,11 @@ public class TaskGUI extends javax.swing.JFrame {
         });
 
         btnprevious.setText("<");
+        btnprevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnpreviousActionPerformed(evt);
+            }
+        });
 
         btnnext.setText(">");
         btnnext.addActionListener(new java.awt.event.ActionListener() {
@@ -170,6 +180,11 @@ public class TaskGUI extends javax.swing.JFrame {
 
         mnureplace.setSelected(true);
         mnureplace.setText("Replace This As Current Task");
+        mnureplace.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnureplaceActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnureplace);
 
         mnurestore.setSelected(true);
@@ -183,6 +198,11 @@ public class TaskGUI extends javax.swing.JFrame {
 
         mnuremove.setSelected(true);
         mnuremove.setText("Remove Current Task");
+        mnuremove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuremoveActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnuremove);
 
         mnuclear.setSelected(true);
@@ -258,28 +278,47 @@ public class TaskGUI extends javax.swing.JFrame {
 
     private void mnurestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnurestoreActionPerformed
         li.next();
-        t = (Task)li.previous();
+        t = (Task) li.previous();
         //update display
         lblctask.setText("" + curtask);
         txtname.setText(t.getName());
         txtdesc.setText(t.getDescription());
-        
+
     }//GEN-LAST:event_mnurestoreActionPerformed
 
     private void mnubeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnubeforeActionPerformed
-        // TODO add your handling code here:
+        String nm = txtname.getText();
+        String d = txtdesc.getText();
+        Task t = new Task(nm, d);
+        if (t.validate() == false) {
+            JOptionPane.showMessageDialog(this, "Error - must enter all information");
+            return;
+        }
+        
+        if (tottask > 0) {
+            li.previous();
+        }
+
+        li.add(t);
+        curtask++;
+        tottask++;
+        lblttask.setText("" + tottask);
+        lblctask.setText("" + curtask);
+        JOptionPane.showMessageDialog(this, "Task Added");
     }//GEN-LAST:event_mnubeforeActionPerformed
 
     private void mnuafterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuafterActionPerformed
         String nm = txtname.getText();
         String d = txtdesc.getText();
         Task t = new Task(nm, d);
-        if(t.validate()==false){
+        if (t.validate() == false) {
             JOptionPane.showMessageDialog(this, "Error - must enter all information");
             return;
         }
-        if(tottask>0) li.next();
-        
+        if (tottask > 0) {
+            li.next();
+        }
+
         li.add(t);
         li.previous();
         curtask++;
@@ -290,10 +329,13 @@ public class TaskGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuafterActionPerformed
 
     private void btnlastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlastActionPerformed
-        if(curtask==tottask) return;
-        while(li.hasNext())
+        if (curtask == tottask) {
+            return;
+        }
+        while (li.hasNext()) {
             li.next();
-        t = (Task)li.previous();
+        }
+        t = (Task) li.previous();
         curtask = tottask;
         //update display
         lblctask.setText("" + curtask);
@@ -305,7 +347,7 @@ public class TaskGUI extends javax.swing.JFrame {
         String result = "";
         for (int i = 0; i < list.size(); i++) {
             t = list.get(i);
-            result += "Task " + (i+1) + ":\n" + t.toString() + "\n";
+            result += "Task " + (i + 1) + ":\n" + t.toString() + "\n";
         }
         JOptionPane.showMessageDialog(this, result);
     }//GEN-LAST:event_mnushowActionPerformed
@@ -313,12 +355,99 @@ public class TaskGUI extends javax.swing.JFrame {
     private void btnnextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnextActionPerformed
         li.next();
         li.next();
-        t = (Task)li.previous();
+        t = (Task) li.previous();
+        //update display
+        curtask++;
+        lblctask.setText("" + curtask);
+        txtname.setText(t.getName());
+        txtdesc.setText(t.getDescription());
+
+    }//GEN-LAST:event_btnnextActionPerformed
+
+    private void mnureplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnureplaceActionPerformed
+        if (tottask == 0) {
+            JOptionPane.showMessageDialog(this, "You need to have at least one task in order to replace it");
+            return;
+        } else {
+            String nm = txtname.getText();
+            String d = txtdesc.getText();
+            Task t = new Task(nm, d);
+            if (t.validate() == false) {
+                JOptionPane.showMessageDialog(this, "Error - must enter all information");
+                return;
+            }
+
+            t = (Task) li.next();
+            li.set(t);
+            li.previous();
+
+            lblctask.setText("" + curtask);
+            txtname.setText(t.getName());
+            txtdesc.setText(t.getDescription());
+            JOptionPane.showMessageDialog(this, "Task has been replaced");
+        }
+    }//GEN-LAST:event_mnureplaceActionPerformed
+
+    private void mnuremoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuremoveActionPerformed
+        if (tottask == 0) {
+            JOptionPane.showMessageDialog(this, "You need to have at least one task in order to remove it");
+            return;
+        } else {
+            li.next();
+            li.remove();
+            tottask -= 1;
+
+            if (tottask == 0) {
+                curtask = 0;
+                lblctask.setText("" + curtask);
+                lblttask.setText("" + tottask);
+                txtname.setText("");
+                txtdesc.setText("");
+            } else if (tottask == 1) {
+                li.previous();
+                curtask = 1;
+                lblctask.setText("" + curtask);
+                lblttask.setText("" + tottask);
+                t = (Task) li.next();
+                txtname.setText(t.getName());
+                txtdesc.setText(t.getDescription());
+            } else {
+                li.previous();
+                curtask -= 1;
+                lblctask.setText("" + curtask);
+                lblttask.setText("" + tottask);
+                t = (Task) li.next();
+                txtname.setText(t.getName());
+                txtdesc.setText(t.getDescription());
+            }
+        }
+    }//GEN-LAST:event_mnuremoveActionPerformed
+
+    private void btnfirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfirstActionPerformed
+        if (curtask == 0) {
+            return;
+        }
+        while (li.hasPrevious()) {
+            li.previous();
+        }
+        t = (Task) li.next();
+        curtask = 1;
         //update display
         lblctask.setText("" + curtask);
         txtname.setText(t.getName());
         txtdesc.setText(t.getDescription());
-    }//GEN-LAST:event_btnnextActionPerformed
+        li.previous();
+    }//GEN-LAST:event_btnfirstActionPerformed
+
+    private void btnpreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnpreviousActionPerformed
+        li.previous();
+        t = (Task) li.previous();
+        //update display
+        curtask--;
+        lblctask.setText("" + curtask);
+        txtname.setText(t.getName());
+        txtdesc.setText(t.getDescription());
+    }//GEN-LAST:event_btnpreviousActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

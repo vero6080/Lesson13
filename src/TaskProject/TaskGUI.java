@@ -5,16 +5,12 @@ import java.util.ListIterator;
 import javax.swing.JOptionPane;
 
 public class TaskGUI extends javax.swing.JFrame {
-    
-    /*
-    - previous doesn't work if going to first task
-        - causes weird stuff to happen when trying to do this
-    - remove current task doesn't work on first task
-        - causes weird stuff to happen when trying to do this
-    - insert before current task doesn't work on first or second task
-    - some other stuff
-    */
 
+    /*
+    - insert before current task doesn't work on first or second task
+    - btnnext shows an error if used on the last item
+    - some other stuff
+     */
     ArrayList<Task> list;
     ListIterator li;
     int curtask, tottask;
@@ -296,6 +292,7 @@ public class TaskGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //keep closed
     private void mnurestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnurestoreActionPerformed
         li.next();
         t = (Task) li.previous();
@@ -315,7 +312,7 @@ public class TaskGUI extends javax.swing.JFrame {
             return;
         }
 
-        if (tottask > 0) {
+        if (tottask > 0 || curtask != 1) {
             li.previous();
         }
 
@@ -326,7 +323,7 @@ public class TaskGUI extends javax.swing.JFrame {
         lblctask.setText("" + curtask);
         JOptionPane.showMessageDialog(this, "Task Added");
     }//GEN-LAST:event_mnubeforeActionPerformed
-    
+
     //keep closed
     private void mnuafterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuafterActionPerformed
         String nm = txtname.getText();
@@ -413,6 +410,7 @@ public class TaskGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mnureplaceActionPerformed
 
+    //keep closed
     private void mnuremoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuremoveActionPerformed
         if (tottask == 0) {
             JOptionPane.showMessageDialog(this, "You need to have at least one task in order to remove it");
@@ -429,7 +427,12 @@ public class TaskGUI extends javax.swing.JFrame {
                 txtname.setText("");
                 txtdesc.setText("");
             } else if (tottask == 1) {
-                li.previous();
+                if (li.hasPrevious()) {
+                    li.previous();
+                } else {
+                    li.next();
+                    li.previous();
+                }
                 curtask = 1;
                 lblctask.setText("" + curtask);
                 lblttask.setText("" + tottask);
@@ -437,8 +440,13 @@ public class TaskGUI extends javax.swing.JFrame {
                 txtname.setText(t.getName());
                 txtdesc.setText(t.getDescription());
             } else {
-                li.previous();
-                curtask -= 1;
+                if (li.hasPrevious()) {
+                    li.previous();
+                    curtask -= 1;
+                } else {
+                    li.next();
+                    li.previous();
+                }
                 lblctask.setText("" + curtask);
                 lblttask.setText("" + tottask);
                 t = (Task) li.next();
@@ -465,14 +473,18 @@ public class TaskGUI extends javax.swing.JFrame {
         li.previous();
     }//GEN-LAST:event_btnfirstActionPerformed
 
+    //keep closed
     private void btnpreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnpreviousActionPerformed
-        li.previous();
-        t = (Task) li.previous();
-        //update display
-        curtask--;
-        lblctask.setText("" + curtask);
-        txtname.setText(t.getName());
-        txtdesc.setText(t.getDescription());
+        if (li.hasPrevious() == false) {
+            return;
+        } else {
+            t = (Task) li.previous();
+            //update display
+            curtask--;
+            lblctask.setText("" + curtask);
+            txtname.setText(t.getName());
+            txtdesc.setText(t.getDescription());
+        }
     }//GEN-LAST:event_btnpreviousActionPerformed
 
     //keep closed

@@ -8,7 +8,7 @@ public class TaskGUI extends javax.swing.JFrame {
 
     /*
     - insert before current task doesn't work on first or second task
-    - btnnext shows an error if used on the last item
+    - btnnext causes curtask to shift towards the negative
     - some other stuff
      */
     ArrayList<Task> list;
@@ -372,12 +372,14 @@ public class TaskGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, result);
     }//GEN-LAST:event_mnushowActionPerformed
 
-    //keep closed
     private void btnnextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnextActionPerformed
         if (li.hasNext() == false) {
             return;
         } else {
             li.next();
+        } if (li.hasNext() == false) {
+            return;
+        } else {
             li.next();
             t = (Task) li.previous();
             //update display

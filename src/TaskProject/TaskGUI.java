@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 public class TaskGUI extends javax.swing.JFrame {
 
     /*
-    - insert before current task doesn't work on first or second task
     - btnnext causes curtask to shift towards the negative
     - some other stuff
      */
@@ -303,6 +302,7 @@ public class TaskGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mnurestoreActionPerformed
 
+    //keep closed
     private void mnubeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnubeforeActionPerformed
         String nm = txtname.getText();
         String d = txtdesc.getText();
@@ -312,7 +312,7 @@ public class TaskGUI extends javax.swing.JFrame {
             return;
         }
 
-        if (tottask > 0 || curtask != 1) {
+        if (tottask > 0 && curtask != 1) {
             li.previous();
         }
 

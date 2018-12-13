@@ -6,11 +6,6 @@ import javax.swing.JOptionPane;
 
 public class TaskGUI extends javax.swing.JFrame {
 
-    /*
-    - mnureplace causes curtask to be messed up (happens when used on all but first task)
-    - mnureplace causes NoSuchElementException, but still works (happens on first task)
-    - mnuremove causes curtask to shift towards the negative when trying to navigate
-     */
     ArrayList<Task> list;
     ListIterator li;
     int curtask, tottask;
@@ -292,7 +287,6 @@ public class TaskGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    //no problems
     private void mnurestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnurestoreActionPerformed
         li.next();
         t = (Task) li.previous();
@@ -303,7 +297,6 @@ public class TaskGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_mnurestoreActionPerformed
 
-    //no problems
     private void mnubeforeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnubeforeActionPerformed
         String nm = txtname.getText();
         String d = txtdesc.getText();
@@ -321,7 +314,6 @@ public class TaskGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Task Added");
     }//GEN-LAST:event_mnubeforeActionPerformed
 
-    //no problems
     private void mnuafterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuafterActionPerformed
         String nm = txtname.getText();
         String d = txtdesc.getText();
@@ -343,7 +335,6 @@ public class TaskGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, "Task Added");
     }//GEN-LAST:event_mnuafterActionPerformed
 
-    //no problems
     private void btnlastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnlastActionPerformed
         if (curtask == tottask) {
             return;
@@ -359,7 +350,6 @@ public class TaskGUI extends javax.swing.JFrame {
         txtdesc.setText(t.getDescription());
     }//GEN-LAST:event_btnlastActionPerformed
 
-    //no problems
     private void mnushowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnushowActionPerformed
         String result = "";
         for (int i = 0; i < list.size(); i++) {
@@ -369,7 +359,6 @@ public class TaskGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, result);
     }//GEN-LAST:event_mnushowActionPerformed
 
-    //no problems
     private void btnnextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnextActionPerformed
         if (curtask == tottask) {
             return;
@@ -408,7 +397,6 @@ public class TaskGUI extends javax.swing.JFrame {
 
             JOptionPane.showMessageDialog(this, "Task has been replaced");
             li.set(t);
-            li.previous();
             txtname.setText(t.getName());
             txtdesc.setText(t.getDescription());
         }
@@ -419,7 +407,6 @@ public class TaskGUI extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "You need to have at least one task in order to remove it");
             return;
         } else {
-            li.next();
             li.remove();
             tottask -= 1;
 
@@ -453,13 +440,13 @@ public class TaskGUI extends javax.swing.JFrame {
                 lblctask.setText("" + curtask);
                 lblttask.setText("" + tottask);
                 t = (Task) li.next();
+                li.previous();
                 txtname.setText(t.getName());
                 txtdesc.setText(t.getDescription());
             }
         }
     }//GEN-LAST:event_mnuremoveActionPerformed
 
-    //no problems
     private void btnfirstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnfirstActionPerformed
         if (curtask == 0) {
             return;
@@ -476,7 +463,6 @@ public class TaskGUI extends javax.swing.JFrame {
         li.previous();
     }//GEN-LAST:event_btnfirstActionPerformed
 
-    //no problems
     private void btnpreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnpreviousActionPerformed
         if (li.hasPrevious() == false) {
             return;
@@ -490,27 +476,20 @@ public class TaskGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnpreviousActionPerformed
 
-    //no problems
     private void mnuexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuexitActionPerformed
         System.exit(0);
     }//GEN-LAST:event_mnuexitActionPerformed
 
-    //no problems
     private void mnuclearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuclearActionPerformed
         txtname.setText("");
         txtdesc.setText("");
     }//GEN-LAST:event_mnuclearActionPerformed
 
     public void preLoad() {
-        li.add(new Task("Fix mnureplace", "It causes NoSuchElementException, but still\nworks (happens on first task)"));
-        li.add(new Task("Fix mnureplace pt.2", "It causes curtask to be messed up (happens\nwhen used on all but first task"));
-        li.add(new Task("Fix mnuremove", "Using it causes curtask to shift by -1 when trying\nto navigate"));
-
-        /*
         li.add(new Task("Math Homework", "pages 12-19"));
         li.add(new Task("Groceries", "Bread\nMilk\nEggs"));
         li.add(new Task("Chores", "Laundry\nClean Driveway"));
-         */
+        
         while (li.hasPrevious()) {
             t = (Task) li.previous();
         }

@@ -499,8 +499,8 @@ public class TaskGUI extends javax.swing.JFrame {
 
     public void preLoad() {
         li.add(new Task("Fix btnnext", "Using btnnext causes curtask to shift by -1 when\nused on last item"));
-        li.add(new Task("Fix mnureplace", "- it causes curtask to be messed up (happens when used on all but first task)\n" +
-"- it causes NoSuchElementException, but still works (happens on first task)"));
+        li.add(new Task("Fix mnureplace", "- it causes curtask to be messed up (happens\nwhen used on all but first task)\n" +
+        "- it causes NoSuchElementException, but still\nworks (happens on first task)"));
         li.add(new Task("Fix mnuremove", "Using it causes curtask to shift by -1 when trying\nto navigate"));
 
         /*

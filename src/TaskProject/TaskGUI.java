@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 public class TaskGUI extends javax.swing.JFrame {
 
     /*
-    - btnnext causes curtask to shift towards the negative when used on last item
     - mnureplace causes curtask to be messed up (happens when used on all but first task)
     - mnureplace causes NoSuchElementException, but still works (happens on first task)
     - mnuremove causes curtask to shift towards the negative when trying to navigate
@@ -370,23 +369,28 @@ public class TaskGUI extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, result);
     }//GEN-LAST:event_mnushowActionPerformed
 
+    //no problems
     private void btnnextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnnextActionPerformed
-        if (li.hasNext()) {
-            li.next();
-        } else {
+        if (curtask == tottask) {
             return;
-        }
-        if (li.hasNext()) {
-            li.next();
         } else {
-            return;
+            if (li.hasNext()) {
+                li.next();
+            } else {
+                return;
+            }
+            if (li.hasNext()) {
+                li.next();
+            } else {
+                return;
+            }
+            t = (Task) li.previous();
+            //update display
+            curtask++;
+            lblctask.setText("" + curtask);
+            txtname.setText(t.getName());
+            txtdesc.setText(t.getDescription());
         }
-        t = (Task) li.previous();
-        //update display
-        curtask++;
-        lblctask.setText("" + curtask);
-        txtname.setText(t.getName());
-        txtdesc.setText(t.getDescription());
     }//GEN-LAST:event_btnnextActionPerformed
 
     private void mnureplaceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnureplaceActionPerformed
@@ -498,9 +502,8 @@ public class TaskGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuclearActionPerformed
 
     public void preLoad() {
-        li.add(new Task("Fix btnnext", "Using btnnext causes curtask to shift by -1 when\nused on last item"));
-        li.add(new Task("Fix mnureplace", "- it causes curtask to be messed up (happens\nwhen used on all but first task)\n" +
-        "- it causes NoSuchElementException, but still\nworks (happens on first task)"));
+        li.add(new Task("Fix mnureplace", "It causes NoSuchElementException, but still\nworks (happens on first task)"));
+        li.add(new Task("Fix mnureplace pt.2", "It causes curtask to be messed up (happens\nwhen used on all but first task"));
         li.add(new Task("Fix mnuremove", "Using it causes curtask to shift by -1 when trying\nto navigate"));
 
         /*
